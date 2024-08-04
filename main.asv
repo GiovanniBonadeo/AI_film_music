@@ -56,4 +56,3 @@ generated_mel_seq = generate_seq_frm_mc(transition_matrix, 8);
 %%
 moded_mel = add_mode_to_mel(generated_mel_seq, 'phrygian')
 
-final_mel = choose_base_note(moded_mel, "A")
