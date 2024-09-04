@@ -36,24 +36,51 @@ end
 
 save('model1.mat', 'grades_data');
 
-%%
+%% Takes variabale grades_data from the .mat file
 
 loaded_data = load('model1.mat', 'grades_data');
 grades_data = loaded_data.grades_data;
 
+%% Cretae transition matrix
+
 transition_matrix = create_markov_chain_tm(grades_data);
 
-% Visualizza la matrice di transizione
+% Display trainsition matrix
 disp('Matrice di transizione normalizzata:');
 disp(transition_matrix);
 
+%% Select rythm
+bpm = 60;
+single_notes_durations = select_rythmic_pattern('standard', bpm);
 
-%mc = dtmc(transition_matrix);
+%% Declare number of notes for you your melody
+
+%for tresillo, gallop and aksak use 3
+%for habanera and standard use multiples of 4
+number_of_notes = 4;
+
+%% Generate new melody
+generated_mel_seq = generate_seq_frm_mc(transition_matrix, number_of_notes);
+
+%% Choose Mode and Base Note
+moded_mel = add_mode_to_mel(generated_mel_seq, 'locrian');
+final_mel = choose_base_note(moded_mel, "D");
+
+%% Create new nmat
+
+number_of_bars = 8;
+track = create_midi_track(final_mel, single_notes_durations, number_of_bars);
+
+%% Listen to melody using Matlab
+playsound(track);
 
 %%
-generated_mel_seq = generate_seq_frm_mc(transition_matrix, 8);
+writemidi(track, 'melody.mid');
 
-%%
-moded_mel = add_mode_to_mel(generated_mel_seq, 'phrygian')
+writemidi(nmat, 'test.mid');
 
-final_mel = choose_base_note(moded_mel, "A")
+%% Section for creating new midi melody (error in midi format)
+
+midi_data = readmidi('scale_c_major.mid');
+nmat = midi2nmat(midi_data);
+writemidi(nmat, 'output.mid');
