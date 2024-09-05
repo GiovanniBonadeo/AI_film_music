@@ -22,7 +22,7 @@ function nmat_track = create_midi_track(pitches, durations, n_bars, harmonic_suc
     for bar = 1:n_bars
         % Get the chord notes for the current bar
         chord = harmonic_succ(bar);
-        chord_notes = get_chord_notes(chord, base_note);
+        chord_notes = get_chord_notes(chord);
         
         % chord notes at the start of the bar
         for j = 1:length(chord_notes)

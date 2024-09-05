@@ -62,14 +62,24 @@ number_of_notes = 4;
 %% Generate new melody
 generated_mel_seq = generate_seq_frm_mc(transition_matrix, number_of_notes);
 
-%% Choose Mode and Base Note
-moded_mel = add_mode_to_mel(generated_mel_seq, 'locrian');
-final_mel = choose_base_note(moded_mel, "D");
+%% Choose mode and base note
+
+mode = ["Ionian", "D"];
+
+moded_mel = add_mode_to_mel(generated_mel_seq, mode(1));
+final_mel = choose_base_note(moded_mel, mode(2));
+
+%% Choose harmonic succession
+
+harmonic_succ = get_harmonic_succ(mode(1));
+
+%% Choose number of bars
+
+number_of_bars = 8;
 
 %% Create new nmat
 
-number_of_bars = 8;
-track = create_midi_track(final_mel, single_notes_durations, number_of_bars);
+track = create_midi_track(final_mel, single_notes_durations, number_of_bars, harmonic_succ, mode(2));
 
 %% Listen to melody using Matlab
 playsound(track);
