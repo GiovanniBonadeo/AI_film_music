@@ -50,3 +50,20 @@ transition_matrix = create_markov_chain_tm(grades_data_test);
 
 disp(transition_matrix)
 
+%%
+% Sintassi della matrice nmat:
+% Colonna 1: Inizio della nota in secondi
+% Colonna 2: Durata della nota in secondi
+% Colonna 3: Numero della nota MIDI (Pitch)
+% Colonna 4: Velocità (Velocity)
+% Colonna 5: Canale MIDI
+
+% Esempio: Crea una matrice di note MIDI
+nmat = [
+    0, 1, 60, 100, 1;  % Nota C4, durata 1 secondo, velocità 100, canale 1
+    1, 1, 62, 100, 1;  % Nota D4
+    2, 1, 64, 100, 1;  % Nota E4
+];
+
+% Scrittura del file MIDI
+writemidi(nmat, 'melody.mid');  % 120 BPM

@@ -6,16 +6,23 @@ addpath("model1/");
 %main creates txt files of sequence of grades for each file midi in the
 %specified directory. 
 
-midi_read_files_matr = create_coll_midi_file('model1');
+midi_read_files_matr = create_coll_midi_file("model1");
 
 for i=1:length(midi_read_files_matr)
     
     nmat = midi_read_files_matr{i};
-
-    %nmat = readmidi('bday.mid'); % midi file 2 matrix
-
-    %nmat = shift(nmat, 'pitch', +33); % transpose pitch
-
+    
+    % durations analysis
+    note_durations = extract_note_durations(nmat);
+    disp(note_durations)
+    
+    if i == 1
+        durations_data = {};
+    end
+    
+    durations_data = all_sequences_of_model(note_durations, durations_data);
+  
+    % notes analysis
     transposed_2C = transpose2c(nmat); %transpose to C
 
     nmat_only_pitches = pitch(transposed_2C); % extract only pitch from nmat
@@ -34,23 +41,35 @@ for i=1:length(midi_read_files_matr)
     
 end
 
-save('model1.mat', 'grades_data');
+save('model1_mel.mat', 'grades_data');
+save('model1_durations.mat', 'durations_data');
 
-%% Takes variabale grades_data from the .mat file
+%% Takes variabale grades_data and durations_data from the .mat file
 
-loaded_data = load('model1.mat', 'grades_data');
+loaded_data = load('model1_mel.mat', 'grades_data');
 grades_data = loaded_data.grades_data;
 
-%% Cretae transition matrix
+loaded_data = load('model1_durations.mat', 'durations_data');
+durations_data = loaded_data.durations_data;
 
-transition_matrix = create_markov_chain_tm(grades_data);
+
+%% Create transition matrix for melody
+
+transition_matrix_mel = create_markov_chain_mel(grades_data);
 
 % Display trainsition matrix
-disp('Matrice di transizione normalizzata:');
-disp(transition_matrix);
+disp('Normalized melody transition matrix:');
+disp(transition_matrix_mel);
 
-%% Select rythm
-bpm = 60;
+%% Create transition matrix for durations
+
+transition_matrix_dur = create_markov_chain_dur(durations_data);
+% Display trainsition matrix
+disp('Normalized durations transition matrix:');
+disp(transition_matrix_dur);
+
+%% Select rythm for bass
+bpm = 100;
 single_notes_durations = select_rythmic_pattern('standard', bpm);
 
 %% Declare number of notes for you your melody
@@ -60,8 +79,10 @@ single_notes_durations = select_rythmic_pattern('standard', bpm);
 number_of_notes = 4;
 
 %% Generate new melody
-generated_mel_seq = generate_seq_frm_mc(transition_matrix, number_of_notes);
+generated_mel_seq = generate_seq_frm_mc(transition_matrix_mel, number_of_notes);
 
+%% Generate new durations
+generated_dur_for_mel = generate_seq_frm_mc(transition_matrix_dur, number_of_notes);
 %% Choose mode and base note
 
 mode = ["Ionian", "D"];
@@ -79,18 +100,14 @@ number_of_bars = 8;
 
 %% Create new nmat
 
-track = create_midi_track(final_mel, single_notes_durations, number_of_bars, harmonic_succ, mode(2));
+rythm_armonic_track = create_midi_track(final_mel, single_notes_durations, number_of_bars, harmonic_succ, mode(2), bpm);
 
 %% Listen to melody using Matlab
-playsound(track);
+playsound(rythm_armonic_track);
+
 
 %%
-writemidi(track, 'melody.mid');
+writemidi(rythm_armonic_track, 'melody.mid');
 
 writemidi(nmat, 'test.mid');
 
-%% Section for creating new midi melody (error in midi format)
-
-midi_data = readmidi('scale_c_major.mid');
-nmat = midi2nmat(midi_data);
-writemidi(nmat, 'output.mid');

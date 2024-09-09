@@ -1,4 +1,4 @@
-function transition_matrix = create_markov_chain_tm(grades_data)
+function transition_matrix = create_markov_chain_mel(grades_data)
 
     % takes one or more sequences of intervals and creates the transition
     % matrix
@@ -6,7 +6,7 @@ function transition_matrix = create_markov_chain_tm(grades_data)
     all_possible_states = [-1 1 2 3 4 5 6 7 8 9 10 11 13 14];
     num_states = length(all_possible_states);
 
-    % Initialize the transition matrix with two extra rows and columns for
+    % Initialize the transition matrix with an extra row and column for
     % the initial state (-1)
     transition_matrix = zeros(num_states);
 

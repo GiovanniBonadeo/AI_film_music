@@ -1,4 +1,4 @@
-function nmat_track = create_midi_track(pitches, durations, n_bars, harmonic_succ, base_note)
+function nmat_track = create_midi_track(pitches, durations, n_bars, harmonic_succ, base_note, tempo)
     % Creates a MIDI track using pitches and duration per each pitch as input
     % Adds harmonic chords at the beginning of each bar based on harmonic_succ
     
@@ -24,28 +24,40 @@ function nmat_track = create_midi_track(pitches, durations, n_bars, harmonic_suc
         chord = harmonic_succ(bar);
         chord_notes = get_chord_notes(chord, base_note);
         
-        % chord notes at the start of the bar
+        % Chord notes at the start of the bar
         for j = 1:length(chord_notes)
             nmat_track(note_idx, 1) = onset_time; % Onset (seconds)
             nmat_track(note_idx, 2) = durations(1); % Duration (same as the first note)
             nmat_track(note_idx, 3) = 1; % Channel (default to 1)
             nmat_track(note_idx, 4) = chord_notes(j); % MIDI Pitch for chord note
-            nmat_track(note_idx, 5) = 100; % Velocity (set to a reasonable value)
-            nmat_track(note_idx, 6) = onset_time; % Onset (seconds)
-            nmat_track(note_idx, 7) = durations(1); % Duration (same as the first note)
+            nmat_track(note_idx, 5) = 100; % Velocity
+            
+            % Convert onset_time and duration to beats
+            onset_in_beats = (onset_time / 60) * tempo;
+            duration_in_beats = (durations(1) / 60) * tempo;
+
+            % Fill column 6 and 7 with beats values
+            nmat_track(note_idx, 6) = onset_in_beats; % Onset in beats
+            nmat_track(note_idx, 7) = onset_in_beats + duration_in_beats; % Note-off in beats
             
             note_idx = note_idx + 1;  % Move to the next position in nmat_track
         end
 
-        % melodic notes for the bar
+        % Melodic notes for the bar
         for i = 1:n_pitches
             nmat_track(note_idx, 1) = onset_time; % Onset (seconds)
             nmat_track(note_idx, 2) = durations(i); % Duration (seconds)
             nmat_track(note_idx, 3) = 1; % Channel (default to 1)
             nmat_track(note_idx, 4) = pitches(i); % MIDI Pitch
-            nmat_track(note_idx, 5) = 127; % Velocity (maximum for now)
-            nmat_track(note_idx, 6) = onset_time; % Onset (seconds)
-            nmat_track(note_idx, 7) = durations(i); % Duration (seconds)
+            nmat_track(note_idx, 5) = 100; % Velocity 
+            
+            % Convert onset_time and duration to beats
+            onset_in_beats = (onset_time / 60) * tempo;
+            duration_in_beats = (durations(i) / 60) * tempo;
+
+            % Fill column 6 and 7 with beats values
+            nmat_track(note_idx, 6) = onset_in_beats; % Onset in beats
+            nmat_track(note_idx, 7) = onset_in_beats + duration_in_beats; % Note-off in beats
             
             % Update onset_time for the next note
             onset_time = onset_time + durations(i);
