@@ -1,66 +1,50 @@
-clc, clear, close all;
-
 addpath("miditoolbox/");
-addpath("model1/");
+addpath("lib/");
 
-%main creates txt files of sequence of grades for each file midi in the
-%specified directory. 
+%% Takes variabale grades_data and durations_data from the .mat file
 
-midi_read_files_matr = create_coll_midi_file('model1');
-
-for i=1:length(midi_read_files_matr)
-    
-    nmat = midi_read_files_matr{i};
-
-    %nmat = readmidi('bday.mid'); % midi file 2 matrix
-
-    %nmat = shift(nmat, 'pitch', +33); % transpose pitch
-
-    transposed_2C = transpose2c(nmat); %transpose to C
-
-    nmat_only_pitches = pitch(transposed_2C); % extract only pitch from nmat
-
-    two_octave_ranged_pitches = two_octave_range(nmat_only_pitches); %restrict between 60 and 83
-
-    notes_sequence = get_note_from_pitch(two_octave_ranged_pitches); %sequence of midi pitch to notes (american notation)
-
-    grades_sequence = get_grade_from_note(notes_sequence); %sequence of notes to grades
-    
-    if i == 1 
-        grades_data = {};
-    end
-
-    grades_data = all_sequences_of_model(grades_sequence, grades_data); %all sequences of the model
-    
-end
-
-save('model1.mat', 'grades_data');
-
-%% Takes variabale grades_data from the .mat file
-
-loaded_data = load('model1.mat', 'grades_data');
+loaded_data = load('model1_mel.mat', 'grades_data');
 grades_data = loaded_data.grades_data;
 
-%% Cretae transition matrix
+loaded_data = load('model1_durations.mat', 'durations_data');
+durations_data = loaded_data.durations_data;
 
-transition_matrix = create_markov_chain_tm(grades_data);
+
+%% Create transition matrix for melody
+
+transition_matrix_mel = create_markov_chain_mel(grades_data);
 
 % Display trainsition matrix
-disp('Matrice di transizione normalizzata:');
-disp(transition_matrix);
+disp('Normalized melody transition matrix:');
+disp(transition_matrix_mel);
 
-%% Select rythm
-bpm = 60;
+%% Create transition matrix for durations
+
+transition_matrix_dur = create_markov_chain_dur(durations_data);
+% Display trainsition matrix
+disp('Normalized durations transition matrix:');
+disp(transition_matrix_dur);
+
+%% Select bpm, number of notes for the melody and number of bars
+bpm = 100;
+number_of_notes = 8;
+number_of_bars = 8;
+
+%% Select rythm for bass
 single_notes_durations = select_rythmic_pattern('standard', bpm);
-
-%% Declare number of notes for you your melody
 
 %for tresillo, gallop and aksak use 3
 %for habanera and standard use multiples of 4
-number_of_notes = 4;
 
 %% Generate new melody
-generated_mel_seq = generate_seq_frm_mc(transition_matrix, number_of_notes);
+generated_mel_seq = generate_seq_frm_mc(transition_matrix_mel, number_of_notes);
+
+%% Generate new durations
+generated_dur_index_for_mel = generate_seq_frm_mc(transition_matrix_dur, number_of_notes);
+generated_dur_for_mel = remap_to_fractions(generated_dur_index_for_mel);
+
+%% Generate bass line
+generated_bass_seq = generate_seq_frm_mc(transition_matrix_mel, number_of_bars);
 
 %% Choose mode and base note
 
@@ -73,27 +57,27 @@ final_mel = choose_base_note(moded_mel, mode(2));
 
 harmonic_succ = get_harmonic_succ(mode(1));
 
-%% Choose number of bars
-
-number_of_bars = 8;
-
 %% Create new nmat
 
-track = create_midi_track(final_mel, single_notes_durations, number_of_bars, harmonic_succ, mode(2));
+rythm_armonic_track = strong_create_midi_track(final_mel, single_notes_durations, number_of_bars, harmonic_succ, mode(2), bpm);
 
+%% Create melody
+melody_track = create_melody_midi_track(final_mel, single_notes_durations, bpm);
+%% Create Harmony
+harmony_track = create_harmony_midi_track(harmonic_succ, mode(2), number_of_bars, single_notes_durations ,bpm);
+%% Create Bass
+bass_track = create_melody_midi_track(generated_bass_seq, rythm_armonic_track, bpm);
 %% Listen to melody using Matlab
-playsound(track);
-
-%% Choose instrument
-midi_matrix = nmat2midi(nmat);
+%playsound(rythm_armonic_track);
 
 %%
-writemidi(track, 'melody.mid');
+midi_new = matrix2midi(melody_track);
+strong_writemidi(midi_new, 'melody.mid');
 
-writemidi(nmat, 'test.mid');
+midi_new = matrix2midi(harmony_track);
+strong_writemidi(midi_new, 'harmony.mid');
 
-%% Section for creating new midi melody (error in midi format)
+midi_new = matrix2midi(bass_track);
+strong_writemidi(midi_new, 'bass.mid');
 
-midi_data = readmidi('scale_c_major.mid');
-nmat = midi2nmat(midi_data);
-writemidi(nmat, 'output.mid');
+
