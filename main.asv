@@ -1,14 +1,18 @@
-clc, clear, close all;
-
 addpath("miditoolbox/");
 addpath("lib/");
 
-describe_character();
+describe_character;
 
-%%
-%Please insert the values for Mystery, Alignment and Wisdom that you
-%received in order
-[grades_data, durations_data] = select_file_to_load(1, 1, 0);
+
+
+%% Takes variabale grades_data and durations_data from the .mat file
+
+loaded_data = load('model1_mel.mat', 'grades_data');
+grades_data = loaded_data.grades_data;
+
+loaded_data = load('model1_durations.mat', 'durations_data');
+durations_data = loaded_data.durations_data;
+
 
 %% Create transition matrix for melody
 
@@ -46,11 +50,7 @@ generated_dur_for_mel = remap_to_fractions(generated_dur_index_for_mel);
 %% Generate bass line
 generated_bass_seq = generate_seq_frm_mc(transition_matrix_mel, number_of_bars);
 
-%% Choose mode based on the scene description
-
-describe_scene();
-
-%%
+%% Choose mode and base note
 
 mode = ["Ionian", "D"];
 

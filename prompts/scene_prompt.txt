@@ -1,0 +1,3 @@
+I would like you to analyse a text which is the description of a cinematic sequence and define its mood, for each mood return the best musical mode to use
+for the soundtrack.
+Choose between Ionian, Dorian, Phrygian, Lydian, Mixolydian, Aeolian, and Locrian.
