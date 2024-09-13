@@ -1,13 +1,14 @@
 clc, clear, close all;
 
 addpath("miditoolbox/");
-addpath("model1/");
+addpath("themes/");
 addpath("lib/");
+addpath("trained_models/");
 
 %main creates txt files of sequence of grades for each file midi in the
 %specified directory. 
 
-midi_read_files_matr = create_coll_midi_file("model1");
+midi_read_files_matr = create_coll_midi_file("themes/121");
 
 for i=1:length(midi_read_files_matr)
     
@@ -42,5 +43,5 @@ for i=1:length(midi_read_files_matr)
     
 end
 
-save('model1_mel.mat', 'grades_data');
-save('model1_durations.mat', 'durations_data');
+save('trained_models/model121_mel.mat', 'grades_data');
+save('trained_models/model121_durations.mat', 'durations_data');

@@ -26,7 +26,7 @@ transition_matrix_dur = create_markov_chain_dur(durations_data);
 %disp(transition_matrix_dur);
 
 %% Select bpm, number of notes for the melody and number of bars
-bpm = 100;
+bpm = 80;
 number_of_notes = 8;
 number_of_bars = 8;
 
@@ -71,13 +71,13 @@ bass_track = create_bass_midi_track(generated_bass_seq, single_bass_notes_durati
 %playsound(rythm_armonic_track);
 
 %%
-midi_new_mel = strong_matrix2midi(melody_track, 300, time_signature, bpm);
+midi_new_mel = strong_matrix2midi(melody_track, 480, time_signature, bpm);
 strong_writemidi(midi_new_mel, 'melody.mid');
 %%
-midi_new_harm = strong_matrix2midi(harmony_track, 300, time_signature);
+midi_new_harm = strong_matrix2midi(harmony_track, 480, time_signature, bpm);
 strong_writemidi(midi_new_harm, 'harmony.mid');
 %%
-midi_new_bass = strong_matrix2midi(bass_track, 300, time_signature, bpm);
+midi_new_bass = strong_matrix2midi(bass_track, 480, time_signature, bpm);
 strong_writemidi(midi_new_bass, 'bass.mid');
 
 
