@@ -56,7 +56,4 @@ function melody = create_melody_midi_track(pitches, durations, n_bars, tempo, ti
         onset_time = onset_time + rest_duration;
         note_idx = note_idx + 1;
     end
-
-    % Remove empty rows from the matrix if there are unused preallocated slots
-    melody = melody(1:note_idx-1, :);
 end

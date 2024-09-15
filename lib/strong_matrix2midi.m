@@ -8,7 +8,7 @@ function midi=strong_matrix2midi(M,ticks_per_quarter_note,timesig,tempo)
 % Adds a program change for the bass clef (Channel 2, Program 33 Acoustic Bass)
 
 if nargin < 2
-  ticks_per_quarter_note = 300;
+  ticks_per_quarter_note = 480;
 end
 
 if nargin < 3

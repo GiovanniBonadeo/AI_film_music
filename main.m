@@ -53,6 +53,8 @@ describe_scene();
 
 mode = ["Aeolian", "B"];
 
+instruments = get_instruments_from_mode(mode(1));
+
 moded_mel = add_mode_to_mel(generated_mel_seq, mode(1));
 final_mel = choose_base_note(moded_mel, mode(2));
 
@@ -71,14 +73,14 @@ harmony_track = create_harmony_midi_track(harmonic_succ, mode(2), number_of_bars
 bass_track = create_bass_midi_track(final_bass, single_bass_notes_durations, number_of_bars, bpm, time_signature);
 %%
 midi_new_mel = strong_matrix2midi(melody_track, 480, time_signature, bpm);
-strong_writemidi(midi_new_mel, 'melody.mid');
+strong_writemidi(midi_new_mel, 'melody.mid', 0, instruments(1));
 %%
 midi_new_harm = strong_matrix2midi(harmony_track, 480, time_signature, bpm);
-strong_writemidi(midi_new_harm, 'harmony.mid');
+strong_writemidi(midi_new_harm, 'harmony.mid', 0, instruments(2));
 %%
 midi_new_bass = strong_matrix2midi(bass_track, 480, time_signature, bpm);
-strong_writemidi(midi_new_bass, 'bass.mid');
+strong_writemidi(midi_new_bass, 'bass.mid', 0, instruments(3));
 %%
 combined_midi = create_full_midi_file(final_mel, generated_dur_for_mel, final_bass, single_bass_notes_durations, harmonic_succ, mode(2), number_of_bars, bpm, time_signature);
 midi_new_partiture = strong_matrix2midi(combined_midi, 480, time_signature, bpm);
-strong_writemidi(midi_new_partiture, 'partiture.mid');
+strong_writemidi(midi_new_partiture, 'partiture.mid', 0, instruments, [0 1 2]);
