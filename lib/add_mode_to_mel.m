@@ -1,6 +1,11 @@
-function moded_mel = add_mode_to_mel(gen_mel_seq, mode)
+function moded_mel = add_mode_to_mel(gen_mel_seq, mode, bass_clef)
 % takes a sequence of grades  as an array and generates the moledy according
 % to the specified mode
+
+if nargin < 3
+  bass_clef = 0;
+end
+
 
  % Define the modes intervals (in semitones) starting from Ionian (C major)
     
@@ -23,6 +28,10 @@ function moded_mel = add_mode_to_mel(gen_mel_seq, mode)
     moded_mel = [];
 
     c_midi = 60;
+
+    if bass_clef == 1
+        c_midi = 36;
+    end
 
     for i = 1:length(gen_mel_seq)
      

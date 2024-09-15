@@ -1,22 +1,11 @@
 function midi=strong_matrix2midi(M,ticks_per_quarter_note,timesig,tempo)
-% midi=matrix2midi(M,ticks_per_quarter_note,timesig,tempo)
-%
-% generates a midi matlab structure from a matrix
-%  specifying a list of notes. The structure output
-%  can then be used by writemidi.m
+% midi=strong_matrix2midi(M,ticks_per_quarter_note,timesig,tempo)
 %
 % M: input matrix:
 %   1     2    3  4   5  6  
 %  [track chan nn vel t1 t2] (any more cols ignored...)
 %
-% optional arguments:
-% - ticks_per_quarter_note: integer (default 300)
-% - timesig: a vector of len 4 (default [4,2,24,8])
-% - tempo: tempo in BPM (default 120 BPM)
-%
-
-% Copyright (c) 2009 Ken Schutte
-% more info at: http://www.kenschutte.com/midi
+% Adds a program change for the bass clef (Channel 2, Program 33 Acoustic Bass)
 
 if nargin < 2
   ticks_per_quarter_note = 300;
@@ -69,21 +58,31 @@ for i=1:Ntracks
   
   msgCtr = 1;
   
-  % set tempo...
+  % Set tempo
   midi.track(i).messages(msgCtr).deltatime = 0;
   midi.track(i).messages(msgCtr).type = 81;
   midi.track(i).messages(msgCtr).midimeta = 0;
-  midi.track(i).messages(msgCtr).data = encode_int(tempo_us_per_qnote,3);
+  midi.track(i).messages(msgCtr).data = encode_int(round(tempo_us_per_qnote), 3);
   midi.track(i).messages(msgCtr).chan = [];
   msgCtr = msgCtr + 1;
   
-  % set time sig...
+  % Set time signature
   midi.track(i).messages(msgCtr).deltatime = 0;
   midi.track(i).messages(msgCtr).type = 88;
   midi.track(i).messages(msgCtr).midimeta = 0;
   midi.track(i).messages(msgCtr).data = timesig(:);
   midi.track(i).messages(msgCtr).chan = [];
   msgCtr = msgCtr + 1;
+
+  % Insert Program Change for bass clef (channel 2, acoustic bass)
+  if any(trM(:,2) == 2) % Check if any events are on channel 2
+      midi.track(i).messages(msgCtr).deltatime = 0;
+      midi.track(i).messages(msgCtr).type = 192; % Program Change
+      midi.track(i).messages(msgCtr).midimeta = 1;
+      midi.track(i).messages(msgCtr).chan = 1; % Channel 2 (0-based indexing in some systems, adjust if needed)
+      midi.track(i).messages(msgCtr).data = 33; % Program 33 (Acoustic Bass)
+      msgCtr = msgCtr + 1;
+  end
   
   [junk,ord] = sort(note_events_ticktime);
 
@@ -103,10 +102,7 @@ for i=1:Ntracks
       midi.track(i).messages(msgCtr).type = 144;
       midi.track(i).messages(msgCtr).data = [trM(n,3); trM(n,4)];
     else
-      %-- note off msg:
-      %midi.track(i).messages(msgCtr).type = 128;
-      %midi.track(i).messages(msgCtr).data = [trM(n,3); trM(n,4)];
-      %-- note on vel=0:
+      % note off with velocity 0 (common trick in MIDI)
       midi.track(i).messages(msgCtr).type = 144;
       midi.track(i).messages(msgCtr).data = [trM(n,3); 0];
     end
@@ -115,7 +111,7 @@ for i=1:Ntracks
     prevtick = cumticks;
   end
 
-  % end of track:
+  % End of track:
   midi.track(i).messages(msgCtr).deltatime = 0;
   midi.track(i).messages(msgCtr).type = 47;
   midi.track(i).messages(msgCtr).midimeta = 0;
@@ -125,12 +121,10 @@ for i=1:Ntracks
   
 end
 
-
-% return a _column_ vector
-% (copied from writemidi.m)
+% Helper function to encode an integer (used in writemidi)
 function A=encode_int(val,Nbytes)
 
-A = zeros(Nbytes,1);  %ensure col vector (diff from writemidi.m...)
+A = zeros(Nbytes,1);  % ensure col vector
 for i=1:Nbytes
   A(i) = bitand(bitshift(val, -8*(Nbytes-i)), 255);
 end
