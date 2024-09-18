@@ -5,6 +5,6 @@ function note_durations = extract_note_durations(nmat)
     % extract timestamps
     note_durations = nmat(:, 7);
     
-    % filter fro negative values
+    % filter for negative values
     note_durations = note_durations(note_durations > 0);
 end

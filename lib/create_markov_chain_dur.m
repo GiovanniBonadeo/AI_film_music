@@ -4,7 +4,7 @@ function transition_matrix_dur = create_markov_chain_dur(durations_data)
     bpm = 120;
     
     % all possible beat fractions
-    all_possible_durations = [-1, 1/64, 1/32, 1/16, 1/8, 1/4, 1/2, 1];
+    all_possible_durations = [-1, 1/64, 3/64, 1/32, 3/32, 1/16, 3/16, 1/8, 3/8, 1/4, 3/8, 1/2, 3/4, 1];
     num_durations = length(all_possible_durations);
     
     % Initialize the transition matrix considering an extra row and column for

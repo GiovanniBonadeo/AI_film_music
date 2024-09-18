@@ -4,27 +4,12 @@ addpath("miditoolbox/");
 addpath("lib/");
 addpath("trained_models/");
 
-%describe_character();
+description_text("character");
 
 %%
 %Please insert the values for Mystery, Alignment and Wisdom that you
 %received in order
-[grades_data, durations_data] = select_file_to_load(1, 2, 0);
-
-%% Create transition matrix for melody
-
-transition_matrix_mel = create_markov_chain_mel(grades_data);
-
-% Display trainsition matrix
-%disp('Normalized melody transition matrix:');
-%disp(transition_matrix_mel);
-
-%% Create transition matrix for durations
-
-transition_matrix_dur = create_markov_chain_dur(durations_data);
-% Display trainsition matrix
-%disp('Normalized durations transition matrix:');
-%disp(transition_matrix_dur);
+[transition_matrix_mel, transition_matrix_dur] = select_file_to_load(1, 2, 0);
 
 %% Select bpm, number of notes for the melody and number of bars
 bpm = 80;
@@ -47,11 +32,13 @@ generated_bass_seq = generate_seq_frm_mc(transition_matrix_mel, length(single_ba
 
 %% Choose mode based on the scene description
 
-describe_scene();
+description_text("scene");
 
 %%
 
-mode = ["Aeolian", "B"];
+%Specify the musical mode (choose from 'Ionian', 'Dorian', 'Phrygian', 
+%'Lydian', 'Mixolydian', 'Aeolian', 'Locrian') and se base note.
+mode = ["Dorian", "Fb"];
 
 instruments = get_instruments_from_mode(mode(1));
 

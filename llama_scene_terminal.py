@@ -7,7 +7,7 @@ import time
 command = 'ollama run llama3.1'
 
 # Testo di input
-input_text = """I would like you to analyse a text which is the description of a cinematic sequence and define its mood, for each mood return the best musical mode to use for the soundtrack. Choose between Ionian, Dorian, Phrygian, Lydian, Mixolydian, Aeolian, and Locrian."""
+input_text = """I would like you to analyse a text which is the description of a cinematic sequence and define its mood, for each mood return the best musical mode and base note to use for the soundtrack. Choose between Ionian, Dorian, Phrygian, Lydian, Mixolydian, Aeolian, and Locrian."""
 
 # Crea il processo e apri il terminale
 process = subprocess.Popen(['osascript', '-e', f'''

@@ -1,11 +1,11 @@
 clc, clear, close all;
 
-addpath("miditoolbox/");
-addpath("themes/");
-addpath("lib/");
-addpath("trained_models/");
+addpath(genpath("miditoolbox"));
+addpath(genpath("themes/"));
+addpath(genpath("lib/"));
+addpath(genpath("trained_models"));
 
-%main creates txt files of sequence of grades for each file midi in the
+%creates .mat files of sequence of grades for each file midi in the
 %specified directory. 
 
 midi_read_files_matr = create_coll_midi_file("themes/121");
@@ -43,5 +43,20 @@ for i=1:length(midi_read_files_matr)
     
 end
 
-save('trained_models/model121_mel.mat', 'grades_data');
-save('trained_models/model121_durations.mat', 'durations_data');
+%Create transition matrix for melody
+
+transition_matrix_mel = create_markov_chain_mel(grades_data);
+
+%Display trainsition matrix
+%disp('Normalized melody transition matrix:');
+%disp(transition_matrix_mel);
+
+%Create transition matrix for durations
+
+transition_matrix_dur = create_markov_chain_dur(durations_data);
+% Display trainsition matrix
+%disp('Normalized durations transition matrix:');
+%disp(transition_matrix_dur);
+
+save('trained_models/model121_mel.mat', 'transition_matrix_mel');
+save('trained_models/model121_durations.mat', 'transition_matrix_dur');

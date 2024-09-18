@@ -5,7 +5,7 @@ function note_based_mel = choose_base_note(mel_seq, base_note)
     transp_value = 0;
 
     switch base_note
-        case {'C'}
+        case {'C', 'B#'}
             transp_value = 0;
         case {'C#', 'Db'}
             transp_value = 1;
@@ -13,9 +13,9 @@ function note_based_mel = choose_base_note(mel_seq, base_note)
             transp_value = 2;
         case {'D#', 'Eb'}
             transp_value = 3;
-        case {'E'}
+        case {'E', 'Fb'}
             transp_value = 4;
-        case {'F'}
+        case {'F', 'E#'}
             transp_value = 5;
         case {'F#', 'Gb'}
             transp_value = 6;
