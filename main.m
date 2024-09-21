@@ -9,7 +9,7 @@ description_text("character");
 %%
 %Please insert the values for Mystery, Alignment and Wisdom that you
 %received in order
-[transition_matrix_mel, transition_matrix_dur] = select_file_to_load(1, 2, 0);
+[transition_matrix_mel, transition_matrix_dur] = select_file_to_load(0, 0, 0);
 
 %% Select bpm, number of notes for the melody and number of bars
 bpm = 80;

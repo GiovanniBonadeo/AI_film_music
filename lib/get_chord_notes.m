@@ -25,8 +25,8 @@ function chord_notes = get_chord_notes(chord, base_note)
         error('Chord %s not found in dictionary', chord);
     end
 
-    base_note_offset = containers.Map({'C', 'C#', 'Db', 'D', 'D#', 'Eb', 'E', 'F', 'F#', 'Gb', 'G', 'G#', 'Ab', 'A', 'A#', 'Bb', 'B'}, ...
-                                      [0, 1, 1, 2, 3, 3, 4, 5, 6, 6, 7, 8, 8, 9, 10, 10, 11]);
+    base_note_offset = containers.Map({'C', 'B#','C#', 'Db', 'D', 'D#', 'Eb', 'E', 'Fb', 'E#', 'F', 'F#', 'Gb', 'G', 'G#', 'Ab', 'A', 'A#', 'Bb', 'B', 'Cb'}, ...
+                                      [0, 0, 1, 1, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 8, 8, 9, 10, 10, 11, 11]);
 
     % Transpose the chord with the base note
     if isKey(base_note_offset, base_note)

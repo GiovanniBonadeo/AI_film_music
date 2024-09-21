@@ -14,7 +14,7 @@ function rawbytes = strong_writemidi(midi, filename, do_run_mode, instrument, ch
     end
     
     if nargin < 4
-        instruments = ones(1, 16); % Default to Acoustic Grand Piano on all channels
+        instrument = ones(1, 16); % Default to Acoustic Grand Piano on all channels
     end
 
     if nargin < 5
@@ -28,7 +28,7 @@ function rawbytes = strong_writemidi(midi, filename, do_run_mode, instrument, ch
         databytes_track{i} = [];
    
         % Create the Program Change message (192, instrument)
-        program_change_msg = [192+channels(i), instrument(i) - 1];
+        program_change_msg = [192+channels(i), instrument(i)];
 
         databytes_track{i} = [databytes_track{i}; encode_var_length(0); program_change_msg'];
         

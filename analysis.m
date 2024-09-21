@@ -8,7 +8,9 @@ addpath(genpath("trained_models"));
 %creates .mat files of sequence of grades for each file midi in the
 %specified directory. 
 
-midi_read_files_matr = create_coll_midi_file("themes/121");
+feat_val = "121";
+
+midi_read_files_matr = create_coll_midi_file("themes/"+feat_val);
 
 for i=1:length(midi_read_files_matr)
     
@@ -58,5 +60,5 @@ transition_matrix_dur = create_markov_chain_dur(durations_data);
 %disp('Normalized durations transition matrix:');
 %disp(transition_matrix_dur);
 
-save('trained_models/model121_mel.mat', 'transition_matrix_mel');
-save('trained_models/model121_durations.mat', 'transition_matrix_dur');
+save('trained_models/model'+feat_val+'_mel.mat', 'transition_matrix_mel');
+save('trained_models/model'+feat_val+'_durations.mat', 'transition_matrix_dur');

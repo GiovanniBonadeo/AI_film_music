@@ -38,7 +38,7 @@ end
         grade = gen_mel_seq(i);
         
         if grade < 1 || grade > 14
-            error('Scale degree %d is out of valid range (1-14).', degree);
+            error('Scale degree %d is out of valid range (1-14).', grade);
         end
         new_note = c_midi + mode_intervals(grade);
         moded_mel = [moded_mel, new_note];

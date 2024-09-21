@@ -4,7 +4,7 @@ function harmony = create_harmony_midi_track(harmonic_succ, base_note, n_bars, t
     % base_note: base note for chord construction
     % n_bars: number of bars
     % tempo: tempo in BPM
-    % time_signature: the time signature (e.g., [4, 4] for 4/4)
+    % time_signature: the time signature
 
     % If the harmonic succession is shorter than the number of bars, repeat the chords
     while n_bars > length(harmonic_succ)
