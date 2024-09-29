@@ -8,7 +8,7 @@ addpath(genpath("trained_models"));
 %creates .mat files of sequence of grades for each file midi in the
 %specified directory. 
 
-feat_val = "121";
+feat_val = "101";
 
 midi_read_files_matr = create_coll_midi_file("themes/"+feat_val);
 
@@ -17,14 +17,17 @@ for i=1:length(midi_read_files_matr)
     nmat = midi_read_files_matr{i};
     
     % durations analysis
-    note_durations = extract_note_durations(nmat);
+    [note_durations, tempo] = extract_note_durations(nmat);
+    
+    % Get beat franction based on bpm and duration
+    rhythmic_pattern = get_rhythmic_pattern_from_durations(note_durations, tempo);
     %disp(note_durations)
     
     if i == 1
         durations_data = {};
     end
     
-    durations_data = all_sequences_of_model(note_durations, durations_data);
+    durations_data = all_sequences_of_model(rhythmic_pattern, durations_data);
   
     % notes analysis
     transposed_2C = transpose2c(nmat); %transpose to C

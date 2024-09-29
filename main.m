@@ -9,16 +9,16 @@ description_text("character");
 %%
 %Please insert the values for Mystery, Alignment and Wisdom that you
 %received in order
-[transition_matrix_mel, transition_matrix_dur] = select_file_to_load(0, 0, 0);
+[transition_matrix_mel, transition_matrix_dur] = select_file_to_load(0, 0, 1);
 
 %% Select bpm, number of notes for the melody and number of bars
-bpm = 80;
-number_of_notes = 8;
+bpm = 72;
+number_of_notes = 6;
 number_of_bars = 8;
 
 %% Select rythm for bass
 %choose between 'standard', 'tresillo', 'gallop', 'habanera'
-[single_bass_notes_durations, time_signature] = select_rythmic_pattern('tresillo');
+[single_bass_notes_durations, time_signature] = select_rythmic_pattern('habanera');
 
 %% Generate new melody
 generated_mel_seq = generate_seq_frm_mc(transition_matrix_mel, number_of_notes);
@@ -38,7 +38,7 @@ description_text("scene");
 
 %Specify the musical mode (choose from 'Ionian', 'Dorian', 'Phrygian', 
 %'Lydian', 'Mixolydian', 'Aeolian', 'Locrian') and se base note.
-mode = ["Dorian", "Fb"];
+mode = ["Aeolian", "A"];
 
 instruments = get_instruments_from_mode(mode(1));
 

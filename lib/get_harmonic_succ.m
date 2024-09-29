@@ -7,7 +7,7 @@ function harmonic_succ = get_harmonic_succ(mode)
     % Define roman numeral chord progressions for each mode
     switch mode
         case 'Ionian'
-            roman_succ = {'I', 'IV', 'V', 'I'};
+            roman_succ = {'I', 'iv', 'V', 'I', 'iii', 'ii', 'V'};
         case 'Dorian'
             roman_succ = {'i', 'IV', 'v', 'i'};
         case 'Phrygian'
@@ -15,7 +15,7 @@ function harmonic_succ = get_harmonic_succ(mode)
         case 'Lydian'
             roman_succ = {'I', 'II', 'V', 'I'};
         case 'Mixolydian'
-            roman_succ = {'I', 'VII', 'IV', 'I'};
+            roman_succ = {'I', 'VII', 'v', 'IV'};
         case 'Aeolian'
             roman_succ = {'i', 'iv', 'v', 'i'};
         case 'Locrian'

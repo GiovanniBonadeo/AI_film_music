@@ -17,6 +17,6 @@ function bpm = gettempo(nmat)
 % See License.txt
 
 if isempty(nmat), return; end
-beat=nmat(end,1);
+beat=nmat(end,1) -1;
 beatdur=nmat(end,6); %
 bpm = (60/beatdur)*beat;
