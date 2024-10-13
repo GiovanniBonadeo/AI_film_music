@@ -12,8 +12,8 @@ function [rythm, time_signature] = select_rythmic_pattern(name_of_rythmic_patter
         
         case 'gallop'
             % Gallop: [1/8, 1/16, 1/16]
-            rythm = [1/8, 1/16, 1/16, 1/8, 1/16, 1/16, 1/8, 1/16, 1/16, 1/8, 1/16, 1/16];
-            time_signature = [4, 2, 24, 8] * 4;
+            rythm = [1/8, 1/16, 1/16, 1/8, 1/16, 1/16, 1/8, 1/16, 1/16, 1/8, 1/16, 1/16] * 4;
+            time_signature = [4, 2, 24, 8];
         
         case 'habanera'
             % Habanera: [3/8, 1/8, 1/4, 1/4]

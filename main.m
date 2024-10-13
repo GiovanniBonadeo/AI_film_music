@@ -12,9 +12,9 @@ description_text("character");
 [transition_matrix_mel, transition_matrix_dur] = select_file_to_load(0, 0, 1);
 
 %% Select bpm, number of notes for the melody and number of bars
-bpm = 72;
-number_of_notes = 6;
-number_of_bars = 8;
+bpm = 136;
+number_of_notes = 10;
+number_of_bars = 5;
 
 %% Select rythm for bass
 %choose between 'standard', 'tresillo', 'gallop', 'habanera'
@@ -38,7 +38,7 @@ description_text("scene");
 
 %Specify the musical mode (choose from 'Ionian', 'Dorian', 'Phrygian', 
 %'Lydian', 'Mixolydian', 'Aeolian', 'Locrian') and se base note.
-mode = ["Aeolian", "A"];
+mode = ["Ionian", "C"];
 
 instruments = get_instruments_from_mode(mode(1));
 
@@ -46,12 +46,12 @@ moded_mel = add_mode_to_mel(generated_mel_seq, mode(1));
 final_mel = choose_base_note(moded_mel, mode(2));
 
 moded_bass = add_mode_to_mel(generated_bass_seq, mode(1), 1);
-final_bass = choose_base_note(moded_bass, mode(2));
+transp_bass = choose_base_note(moded_bass, mode(2));
 
 %% Choose harmonic succession
-
 harmonic_succ = get_harmonic_succ(mode(1));
-
+%% Bass following harmony 
+final_bass = bass_with_harm(transp_bass, harmonic_succ, number_of_bars, mode(2));
 %% Create melody
 melody_track = create_melody_midi_track(final_mel, generated_dur_for_mel, number_of_bars, bpm, time_signature);
 %% Create Harmony

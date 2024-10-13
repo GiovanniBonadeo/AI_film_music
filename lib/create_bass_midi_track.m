@@ -26,11 +26,10 @@ function bass = create_bass_midi_track(pitches, durations, n_bars, tempo, time_s
     end
     
     % Repeat the pattern of pitches and durations for the specified number of bars
-    repeated_pitches = repmat(pitches, 1, n_bars);  % Repeat the pitches for the number of bars
     repeated_durations = repmat(note_durations, 1, n_bars);  % Repeat the durations for the number of bars
     
     % Calculate the total number of notes
-    total_notes = length(repeated_pitches);
+    total_notes = length(pitches);
     bass = zeros(total_notes, 6);  % Preallocate the matrix for the MIDI track
     
     onset_time = 0;  % Track the onset time for each note
@@ -43,7 +42,7 @@ function bass = create_bass_midi_track(pitches, durations, n_bars, tempo, time_s
         % Add the pitch and its duration to the matrix
         bass(note_idx, 1) = 1;  % Track (default to 1)
         bass(note_idx, 2) = 1;  % Channel (default to 1)
-        bass(note_idx, 3) = repeated_pitches(i);  % MIDI pitch of the note
+        bass(note_idx, 3) = pitches(i);  % MIDI pitch of the note
         bass(note_idx, 4) = 100;  % Velocity (default to 100)
         bass(note_idx, 5) = onset_time;  % Start time (in seconds)
         bass(note_idx, 6) = onset_time + note_duration_seconds;  % End time (in seconds)

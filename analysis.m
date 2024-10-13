@@ -8,7 +8,7 @@ addpath(genpath("trained_models"));
 %creates .mat files of sequence of grades for each file midi in the
 %specified directory. 
 
-feat_val = "101";
+feat_val = "011";
 
 midi_read_files_matr = create_coll_midi_file("themes/"+feat_val);
 
